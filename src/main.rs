@@ -31,6 +31,9 @@ fn main() {
                 app_type.kind_names(),
             )
             .prompt();
+
+            // To Do 
+            //project builder struct builder pattern to keep project details
         }
     }
 }

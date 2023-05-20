@@ -19,7 +19,11 @@ impl BuilderConfig {
     }
 
     pub fn get_type_by_name(&self, name: &str) -> Option<Type> {
-        self.types.iter().find(|t|  t.name.as_str() == name).cloned()
+        self.types.iter().find(|t| t.name.as_str() == name).cloned()
+    }
+
+    pub fn get_template_by_kind(&self, name: &str) -> Option<Template> {
+        self.templates.iter().find(|t| t.kind == name).cloned()
     }
 }
 
@@ -35,12 +39,12 @@ impl Type {
         format!("{} {}", self.name, self.description)
     }
 
-    pub fn kind_names(&self) -> Vec<&str>{
+    pub fn kind_names(&self) -> Vec<&str> {
         self.kinds.iter().map(|k| k.as_str()).collect()
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Template {
     kind: String,
     tool: String,
@@ -49,13 +53,13 @@ pub struct Template {
     choices: Vec<Choice>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Input {
     prompt: String,
     key: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Choice {
     prompt: String,
     key: String,
