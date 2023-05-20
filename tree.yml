@@ -1,0 +1,29 @@
+kinds:
+- name: UI
+  description: front-end applications with or without SSR
+  kinds: 
+  - ui
+- name: Service
+  description: REST/GRAPHQL HTTP service
+  kinds: 
+  - business
+  - utility    
+- name: Library
+  description: Shared Library for use in services
+  kinds: 
+  - dao
+  - util
+templates:
+  - name: reactCRA
+    kind: ui 
+    tool: yarn
+    location: ./create-react-app
+    inputs:
+      - prompt: project/artifact name
+        key: artifact-name
+    choices:
+      - prompt: would you like to add material-ui?
+        key: i18n
+        
+      
+
