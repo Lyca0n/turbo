@@ -1,8 +1,9 @@
-kinds:
+types:
 - name: UI
   description: front-end applications with or without SSR
   kinds: 
-  - ui
+  - cra
+  - next
 - name: Service
   description: REST/GRAPHQL HTTP service
   kinds: 
@@ -15,7 +16,7 @@ kinds:
   - util
 templates:
   - name: reactCRA
-    kind: ui 
+    kind: cra 
     tool: yarn
     location: ./create-react-app
     inputs:

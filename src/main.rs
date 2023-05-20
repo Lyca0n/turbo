@@ -6,27 +6,32 @@ use std::process::Command;
 use std::process::Stdio;
 
 use clap::Parser;
+use inquire::Select;
 use turbo::cmd::{Cli, Commands};
 use turbo::config::BuilderConfig;
-use inquire::Select;
 static VERSION: &str = "V0.0.1";
 
 fn main() {
     check_prerequisites();
     let path = "./tree.yml";
-    let config = BuilderConfig::from_file(path.to_string());    
+    let config = BuilderConfig::from_file(path.to_string());
     let args = Cli::parse();
     match args.command {
         Commands::Version {} => {
             println!("turbo {VERSION}")
         }
         Commands::New => {
-            for kind in config.kinds {
-                println!("- {}: {} ", kind.name, kind.description)                
-            }
-            //let options = config.kind_names();
-            let _kind = Select::new("Select project type",vec!["none"]).prompt();
-        },
+            println!("Select a type of project");
+            let app_type_name = Select::new("Select project type", config.type_names())
+                .prompt()
+                .unwrap();
+            let app_type = config.get_type_by_name(app_type_name).unwrap();
+            let type_kind_name = Select::new(
+                &format!("Select kind of {}", app_type_name),
+                app_type.kind_names(),
+            )
+            .prompt();
+        }
     }
 }
 
