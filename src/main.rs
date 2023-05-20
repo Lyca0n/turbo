@@ -32,7 +32,7 @@ fn main() {
             )
             .prompt();
 
-            // To Do 
+            // To Do
             //project builder struct builder pattern to keep project details
         }
     }
