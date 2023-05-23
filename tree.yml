@@ -18,7 +18,7 @@ templates:
   - name: reactCRA
     kind: cra 
     tool: yarn
-    location: ./create-react-app
+    location: ./my-app
     inputs:
       - prompt: project/artifact name
         key: artifact-name

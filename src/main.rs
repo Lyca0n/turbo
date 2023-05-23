@@ -6,10 +6,14 @@ use std::process::Command;
 use std::process::Stdio;
 
 use clap::Parser;
+use inquire::Confirm;
 use inquire::Select;
+use inquire::Text;
+use tera::Error;
+use tera::Tera;
 use turbo::cmd::{Cli, Commands};
 use turbo::config::BuilderConfig;
-static VERSION: &str = "V0.0.1";
+use turbo::VERSION;
 
 fn main() {
     check_prerequisites();
@@ -30,12 +34,48 @@ fn main() {
                 &format!("Select kind of {}", app_type_name),
                 app_type.kind_names(),
             )
-            .prompt();
+            .prompt()
+            .unwrap();
+            let mut template = config.get_template_by_kind(type_kind_name).unwrap();
 
+            template.fill_inputs(|input| Text::new(input.prompt.as_str()).prompt().unwrap());
+
+            template.fill_choices(|choice| {
+                Confirm::new(choice.prompt.as_str())
+                    .with_default(true)
+                    .prompt()
+                    .unwrap()
+            });
+
+            println!("using template {:#?}", template);
+            //try tera
+            let tera = match load_template(format!("{}{}",template.location.as_str(), "**/*.html").as_str()) {
+                Ok(t) => t,
+                Err(e) => {
+                    panic!("unable to load template");
+                }
+            };
+
+            for name in tera.get_template_names() {
+                println!("file {}", name)
+            }
             // To Do
             //project builder struct builder pattern to keep project details
         }
     }
+}
+
+fn load_template(path: &str) -> Result<Tera, Error> {
+    let mut tera = match Tera::new(path) {
+        Ok(t) => t,
+        Err(e) => {
+            println!("Parsing error(s): {}", e);
+            return Err(e);
+        }
+    };
+
+    tera.autoescape_on(vec![".html"]);
+    Ok(tera)
 }
 
 fn check_prerequisites() {

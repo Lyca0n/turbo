@@ -2,6 +2,8 @@ use serde::{Deserialize, Serialize};
 use serde_yaml;
 use std::fs::File;
 
+use crate::common::Template;
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct BuilderConfig {
     pub types: Vec<Type>,
@@ -42,25 +44,4 @@ impl Type {
     pub fn kind_names(&self) -> Vec<&str> {
         self.kinds.iter().map(|k| k.as_str()).collect()
     }
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct Template {
-    kind: String,
-    tool: String,
-    location: String,
-    inputs: Vec<Input>,
-    choices: Vec<Choice>,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct Input {
-    prompt: String,
-    key: String,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct Choice {
-    prompt: String,
-    key: String,
 }
