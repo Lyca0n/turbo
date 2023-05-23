@@ -22,7 +22,7 @@ templates:
     extensions: html,ts,tsx,json
     inputs:
       - prompt: project/artifact name
-        key: artifact-name
+        key: artifact_name
     choices:
       - prompt: would you like to add material-ui?
         key: i18n

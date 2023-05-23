@@ -9,6 +9,7 @@ use clap::Parser;
 use inquire::Confirm;
 use inquire::Select;
 use inquire::Text;
+use tera::Context;
 use tera::Error;
 use tera::Tera;
 use turbo::cmd::{Cli, Commands};
@@ -66,6 +67,9 @@ fn main() {
             for name in tera.get_template_names() {
                 println!("file {}", name)
             }
+            let mut context = Context::new();
+            context.insert("artifact_name", "chaos");            
+            println!("{}", tera.render("package.json", &context).unwrap());
             // To Do
             //project builder struct builder pattern to keep project details
         }
