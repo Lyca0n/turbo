@@ -49,7 +49,14 @@ fn main() {
 
             println!("using template {:#?}", template);
             //try tera
-            let tera = match load_template(format!("{}**/*.{{{}}}",template.location.as_str(), template.extensions.as_str()).as_str()) {
+            let tera = match load_template(
+                format!(
+                    "{}**/*.{{{}}}",
+                    template.location.as_str(),
+                    template.extensions.as_str()
+                )
+                .as_str(),
+            ) {
                 Ok(t) => t,
                 Err(e) => {
                     panic!("unable to load template");
