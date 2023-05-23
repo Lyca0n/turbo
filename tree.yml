@@ -19,6 +19,7 @@ templates:
     kind: cra 
     tool: yarn
     location: ./my-app
+    extensions: html,ts,tsx,json
     inputs:
       - prompt: project/artifact name
         key: artifact-name

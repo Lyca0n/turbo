@@ -5,6 +5,7 @@ pub struct Template {
     pub kind: String,
     pub tool: String,
     pub location: String,
+    pub extensions: String,
     pub inputs: Vec<Input>,
     pub choices: Vec<Choice>,
 }
