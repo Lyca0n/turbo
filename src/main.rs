@@ -1,7 +1,12 @@
 #![allow(dead_code)]
 #![allow(unused_variables)]
 
+use std::fs;
+use std::fs::write;
+use std::fs::OpenOptions;
 use std::io::ErrorKind;
+use std::io::Write;
+use std::path::Path;
 use std::process::Command;
 use std::process::Stdio;
 
@@ -48,28 +53,31 @@ fn main() {
                     .unwrap()
             });
 
-            println!("using template {:#?}", template);
+            //prepare files
+            let destination = "./test-dir";
+            let _ = fs::create_dir(destination);
+            let path = Path::new(destination);
+            template.clone_source(path);
             //try tera
             let tera = match load_template(
-                format!(
-                    "{}**/*.{{{}}}",
-                    template.location.as_str(),
-                    template.extensions.as_str()
-                )
-                .as_str(),
+                format!("{}**/*.{{{}}}", destination, template.extensions.as_str()).as_str(),
             ) {
                 Ok(t) => t,
                 Err(e) => {
                     panic!("unable to load template");
                 }
             };
-
-            for name in tera.get_template_names() {
-                println!("file {}", name)
-            }
             let mut context = Context::new();
-            context.insert("artifact_name", "chaos");            
-            println!("{}", tera.render("package.json", &context).unwrap());
+            context.insert("artifact_name", "chaos");
+            for name in tera.get_template_names() {
+                println!("file {}", name);
+                let destFile = format!("{}{}{}",destination,"/",name);
+                let replacer = tera.render(name, &context).unwrap();
+                let mut f = OpenOptions::new().write(true).open(destFile).unwrap();
+                let _ = f.write_all(replacer.as_bytes());
+                let _ = f.flush();
+            }
+
             // To Do
             //project builder struct builder pattern to keep project details
         }

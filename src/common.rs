@@ -1,4 +1,8 @@
+use std::path::Path;
+
 use serde::{Deserialize, Serialize};
+
+use crate::util::git_clone;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Template {
@@ -26,6 +30,11 @@ impl Template {
             let res = callback(&choice);
             choice.value = Some(res);
         }
+    }
+
+    pub fn clone_source(&self, dest: &Path){
+        let cloned = git_clone(dest, &self.location);
+        
     }
 }
 #[derive(Debug, Serialize, Deserialize, Clone)]

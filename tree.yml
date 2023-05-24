@@ -18,7 +18,7 @@ templates:
   - name: reactCRA
     kind: cra 
     tool: yarn
-    location: ./my-app
+    location: https://gitlab.autozone.com/10561544/react-template.git
     extensions: html,ts,tsx,json
     inputs:
       - prompt: project/artifact name
