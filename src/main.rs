@@ -2,9 +2,7 @@
 #![allow(unused_variables)]
 
 use std::fs;
-use std::fs::OpenOptions;
 use std::io::ErrorKind;
-use std::io::Write;
 use std::path::Path;
 use std::process::Command;
 use std::process::Stdio;
@@ -13,12 +11,12 @@ use clap::Parser;
 use inquire::Confirm;
 use inquire::Select;
 use inquire::Text;
-use tera::Context;
 use tera::Error;
 use tera::Tera;
 use turbo::cmd::{Cli, Commands};
 use turbo::config::BuilderConfig;
 use turbo::VERSION;
+use turbo::renderer::Renderer;
 
 fn main() {
     check_prerequisites();
@@ -55,30 +53,19 @@ fn main() {
 
             //prepare files
             let _ = fs::create_dir(project_path);
-            let path = Path::new(project_path);
-            let _ = template.clone_source(path);
-            //try tera
-            let tera = match load_template(
-                format!("{}**/*.{{{}}}", project_path.to_string_lossy(), template.extensions.as_str()).as_str(),
-            ) {
-                Ok(t) => t,
-                Err(e) => {
-                    panic!("unable to load template");
-                }
-            };
-            let mut context = Context::new();
-            context.insert("artifact_name", "chaos");
-            for name in tera.get_template_names() {
-                println!("file {}", name);
-                let destFile = format!("{}{}{}", project_path.to_string_lossy(), "/", name);
-                let replacer = tera.render(name, &context).unwrap();
-                let mut f = OpenOptions::new().write(true).open(destFile).unwrap();
-                let _ = f.write_all(replacer.as_bytes());
-                let _ = f.flush();
+            let _ = template.clone_source(project_path);
+
+
+            // renderer 
+            let mut renderer = Renderer::new(template.extensions.clone(), name.clone());
+            renderer.add_to_context("artifact_name", "chaos");
+            if let Err(r) =  renderer.init_template() {
+                println!("unable to init template files");
+            }
+            if let Ok(r) = renderer.render_all_in_place(){
+                println!("project created and ready to use!");
             }
 
-            // To Do
-            //project builder struct builder pattern to keep project details
         }
     }
 }
