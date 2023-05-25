@@ -30,6 +30,7 @@ fn main() {
             println!("turbo {VERSION}")
         }
         Commands::New { name } => {
+            let project_path = Path::new(&name);
             println!("Select a type of project");
             let app_type_name = Select::new("Select project type", config.type_names())
                 .prompt()
@@ -53,13 +54,12 @@ fn main() {
             });
 
             //prepare files
-            let destination = "./test-dir";
-            let _ = fs::create_dir(destination);
-            let path = Path::new(destination);
-            template.clone_source(path);
+            let _ = fs::create_dir(project_path);
+            let path = Path::new(project_path);
+            let _ = template.clone_source(path);
             //try tera
             let tera = match load_template(
-                format!("{}**/*.{{{}}}", destination, template.extensions.as_str()).as_str(),
+                format!("{}**/*.{{{}}}", project_path.to_string_lossy(), template.extensions.as_str()).as_str(),
             ) {
                 Ok(t) => t,
                 Err(e) => {
@@ -70,7 +70,7 @@ fn main() {
             context.insert("artifact_name", "chaos");
             for name in tera.get_template_names() {
                 println!("file {}", name);
-                let destFile = format!("{}{}{}", destination, "/", name);
+                let destFile = format!("{}{}{}", project_path.to_string_lossy(), "/", name);
                 let replacer = tera.render(name, &context).unwrap();
                 let mut f = OpenOptions::new().write(true).open(destFile).unwrap();
                 let _ = f.write_all(replacer.as_bytes());
