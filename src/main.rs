@@ -59,6 +59,7 @@ fn main() {
             // renderer 
             let mut renderer = Renderer::new(template.extensions.clone(), name.clone());
             renderer.add_to_context("artifact_name", "chaos");
+            renderer.add_to_context("i18n", "true");
             if let Err(r) =  renderer.init_template() {
                 println!("unable to init template files");
             }
