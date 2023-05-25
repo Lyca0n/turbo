@@ -11,3 +11,4 @@ inquire = "0.6.2"
 serde = { version = "1.0.163", features = ["derive"] }
 serde_yaml = "0.9.21"
 tera = { version = "1", default-features = false }
+thiserror = "1.0.40"

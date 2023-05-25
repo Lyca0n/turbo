@@ -26,6 +26,13 @@ templates:
     choices:
       - prompt: would you like to add material-ui?
         key: i18n
-        
-      
+  - name: dao-library
+    kind: dao 
+    tool: mvn
+    location: https://gitlab.autozone.com/10561544/dao-template.git
+    extensions: java,pom,properties
+    inputs:
+      - prompt: project/artifact name
+        key: artifact_name
+
 

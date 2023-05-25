@@ -17,5 +17,9 @@ pub enum ProjectTypes {
 #[derive(Debug, Subcommand)]
 pub enum Commands {
     Version,
-    New,
+    #[command(arg_required_else_help = true)]
+    New {
+        #[arg(required = true)]
+        name: String,
+    },
 }

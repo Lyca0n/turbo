@@ -10,7 +10,9 @@ pub struct Template {
     pub tool: String,
     pub location: String,
     pub extensions: String,
+    #[serde(default)]
     pub inputs: Vec<Input>,
+    #[serde(default)]
     pub choices: Vec<Choice>,
 }
 

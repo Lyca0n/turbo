@@ -2,7 +2,6 @@
 #![allow(unused_variables)]
 
 use std::fs;
-use std::fs::write;
 use std::fs::OpenOptions;
 use std::io::ErrorKind;
 use std::io::Write;
@@ -30,7 +29,7 @@ fn main() {
         Commands::Version {} => {
             println!("turbo {VERSION}")
         }
-        Commands::New => {
+        Commands::New { name } => {
             println!("Select a type of project");
             let app_type_name = Select::new("Select project type", config.type_names())
                 .prompt()
@@ -71,7 +70,7 @@ fn main() {
             context.insert("artifact_name", "chaos");
             for name in tera.get_template_names() {
                 println!("file {}", name);
-                let destFile = format!("{}{}{}",destination,"/",name);
+                let destFile = format!("{}{}{}", destination, "/", name);
                 let replacer = tera.render(name, &context).unwrap();
                 let mut f = OpenOptions::new().write(true).open(destFile).unwrap();
                 let _ = f.write_all(replacer.as_bytes());
