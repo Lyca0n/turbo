@@ -1,4 +1,4 @@
-use clap::{Parser, Subcommand};
+use clap::{Parser, Subcommand, Args};
 
 #[derive(Debug, Parser)]
 #[command(name = "turbo")]
@@ -6,12 +6,6 @@ use clap::{Parser, Subcommand};
 pub struct Cli {
     #[command(subcommand)]
     pub command: Commands,
-}
-
-pub enum ProjectTypes {
-    Web,
-    Mobile,
-    Service,
 }
 
 #[derive(Debug, Subcommand)]
@@ -22,4 +16,19 @@ pub enum Commands {
         #[arg(required = true)]
         name: String,
     },
+    Mold(MoldArgs),
+}
+
+#[derive(Debug, Args)]
+#[command(args_conflicts_with_subcommands = true)]
+pub struct MoldArgs {
+    #[command(subcommand)]
+    pub command: Option<MoldCommands>,
+    pub name:String,
+}
+
+#[derive(Debug, Subcommand)]
+pub enum MoldCommands {
+    List,
+    Diff{vars:String}
 }

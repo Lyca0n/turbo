@@ -7,6 +7,7 @@ use std::path::Path;
 use std::process::Command;
 use std::process::Stdio;
 
+use clap::Args;
 use clap::Parser;
 use inquire::Confirm;
 use inquire::Select;
@@ -67,6 +68,19 @@ fn main() {
                 println!("project created and ready to use!");
             }
 
+        }, 
+        Commands::Mold(args) => {
+            let cmd =  args.command.unwrap_or(turbo::cmd::MoldCommands::List);
+            let template_name = args.name;
+            let template = config.get_template_by_name(&template_name).expect("template not found");
+            let dir = "./template";
+            let _ = template.clone_source(Path::new(dir));
+
+            let mut renderer = Renderer::new(template.extensions.clone(), dir.to_string());
+            if let Err(r) =  renderer.init_template() {
+                println!("unable to init template files");
+            }
+            println!("{:?}",renderer.template_list());
         }
     }
 }
