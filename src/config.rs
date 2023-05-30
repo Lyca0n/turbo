@@ -27,6 +27,10 @@ impl BuilderConfig {
     pub fn get_template_by_kind(&self, name: &str) -> Option<Template> {
         self.templates.iter().find(|t| t.kind == name).cloned()
     }
+
+    pub fn get_template_by_name(&self, name: &str) -> Option<Template> {
+        self.templates.iter().find(|t| t.name.as_str() == name).cloned()
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]

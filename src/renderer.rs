@@ -34,11 +34,19 @@ impl Renderer {
         self.context.insert(key, value);
     }
 
+    pub fn template_list(&self) -> Result<Vec<&str>,Error> {
+        if let Some(tera) = self.templater.as_ref() {            
+            Ok(tera.get_template_names().collect())
+        }else{
+            Err(Error::Generic("templater not initialized".to_owned()))
+        }
+    }
     pub fn render_all_in_place(&self) -> Result<(), Error> {
         if let Some(tera) = self.templater.as_ref() {
             for name in tera.get_template_names() {
                 println!("file {}", name);
                 let file_path = Path::new(self.dir.as_str()).join(name);
+                // To Do use tera render_to
                 let replacer = self
                     .templater
                     .as_ref()
@@ -53,9 +61,10 @@ impl Renderer {
                 let _ = f.flush();
             }
             Ok(())
-        } else {
+        }else{
             Err(Error::Generic("templater not initialized".to_owned()))
         }
+
     }
 
     fn tera_mask(&self) -> String {

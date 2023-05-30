@@ -6,6 +6,7 @@ use crate::{error::Error, util::git_clone, Result};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Template {
+    pub name:String,
     pub kind: String,
     pub tool: String,
     pub location: String,
@@ -44,6 +45,7 @@ impl Template {
             )))
         }
     }
+    
 }
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Input {
