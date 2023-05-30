@@ -53,10 +53,9 @@ impl Renderer {
                 let _ = f.flush();
             }
             Ok(())
-        }else{
+        } else {
             Err(Error::Generic("templater not initialized".to_owned()))
         }
-
     }
 
     fn tera_mask(&self) -> String {

@@ -2,7 +2,7 @@ use std::path::Path;
 
 use serde::{Deserialize, Serialize};
 
-use crate::{util::git_clone, error::Error, Result};
+use crate::{error::Error, util::git_clone, Result};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Template {
@@ -34,14 +34,15 @@ impl Template {
         }
     }
 
-    pub fn clone_source(&self, dest: &Path) -> Result<()>{
-        if let true  = git_clone(dest, &self.location){
+    pub fn clone_source(&self, dest: &Path) -> Result<()> {
+        if let true = git_clone(dest, &self.location) {
             Ok(())
-        }else {
-            Err(Error::Generic(format!("Unable to load template from {}", dest.to_str().unwrap())))
+        } else {
+            Err(Error::Generic(format!(
+                "Unable to load template from {}",
+                dest.to_str().unwrap()
+            )))
         }
-        
-        
     }
 }
 #[derive(Debug, Serialize, Deserialize, Clone)]

@@ -15,8 +15,8 @@ use tera::Error;
 use tera::Tera;
 use turbo::cmd::{Cli, Commands};
 use turbo::config::BuilderConfig;
-use turbo::VERSION;
 use turbo::renderer::Renderer;
+use turbo::VERSION;
 
 fn main() {
     check_prerequisites();
@@ -55,18 +55,16 @@ fn main() {
             let _ = fs::create_dir(project_path);
             let _ = template.clone_source(project_path);
 
-
-            // renderer 
+            // renderer
             let mut renderer = Renderer::new(template.extensions.clone(), name.clone());
             renderer.add_to_context("artifact_name", "chaos");
             renderer.add_to_context("i18n", "true");
-            if let Err(r) =  renderer.init_template() {
+            if let Err(r) = renderer.init_template() {
                 println!("unable to init template files");
             }
-            if let Ok(r) = renderer.render_all_in_place(){
+            if let Ok(r) = renderer.render_all_in_place() {
                 println!("project created and ready to use!");
             }
-
         }
     }
 }

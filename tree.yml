@@ -24,7 +24,7 @@ templates:
       - prompt: project/artifact name
         key: artifact_name
     choices:
-      - prompt: would you like to add material-ui?
+      - prompt: would you like to add internazionalization?
         key: i18n
   - name: dao-library
     kind: dao 
